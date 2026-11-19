@@ -18,7 +18,7 @@
       "rel": "child",
       "href": "./collection.json",
       "type": "application/json",
-      "title": "Example Sentinel-2 Collection"
+      "title": "Example AlphaEarth Embedding Collection"
     }
   ],
   "title": "Earth Observation Compression Examples"

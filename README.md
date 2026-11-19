@@ -47,7 +47,7 @@ Compression ratio, bits per value, and throughput should be calculated consisten
 
 ## Using the Extension
 
-Include the Compress Extension schema URI in an Item's `stac_extensions` array when using `compress:*` fields. The example Item shows representative Sentinel-2 metadata for a compressed representation. The values illustrate the field meanings and are not benchmark results.
+Include the Compress Extension schema URI in an Item's `stac_extensions` array when using `compress:*` fields. The example Item shows a compressed AlphaEarth embedding asset. Its URL is illustrative, and its values are not benchmark results.
 
 ## Contributing
 

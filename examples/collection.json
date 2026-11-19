@@ -1,8 +1,8 @@
 {
-  "id": "sentinel-2-compress-example",
+  "id": "alphaearth-compress-example",
   "type": "Collection",
   "stac_version": "1.1.0",
-  "description": "A sample collection of Sentinel-2 imagery demonstrating compression metadata on its Items.",
+  "description": "A sample collection of AlphaEarth embeddings demonstrating compression metadata on its Items.",
   "links": [
     {
       "rel": "root",
@@ -23,10 +23,10 @@
       "rel": "item",
       "href": "./item.json",
       "type": "application/geo+json",
-      "title": "Compressed Sentinel-2 sample scene"
+      "title": "Compressed AlphaEarth embedding"
     }
   ],
-  "title": "Sentinel-2 Compression Metadata Example",
+  "title": "AlphaEarth Embedding Compression Example",
   "extent": {
     "spatial": {
       "bbox": [

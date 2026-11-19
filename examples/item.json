@@ -4,7 +4,7 @@
   "stac_extensions": [
     "https://stac-extensions.github.io/compress/v1.0.0/schema.json"
   ],
-  "id": "S2A_MSIL1C_20240615T184921_compressed",
+  "id": "alphaearth-foundations-2024_compressed",
   "geometry": {
     "type": "Polygon",
     "coordinates": [
@@ -19,32 +19,27 @@
   },
   "bbox": [-122.6, 37.0, -121.2, 38.1],
   "properties": {
-    "datetime": "2024-06-15T18:42:31Z",
-    "platform": "sentinel-2a",
-    "instruments": ["msi"],
-    "constellation": "sentinel-2",
+    "datetime": "2024-06-15T00:00:00Z",
     "compress:mode": "lossy",
     "compress:codec": "georvq",
-    "compress:codec_version": "1",
-    "compress:configuration": "georvq-s2-v1",
+    "compress:codec_version": "2",
+    "compress:configuration": "georvq-ae-v2",
     "compress:objective": "downstream_accuracy",
     "compress:parameters": {
-      "bit_rate": 2.0
+      "target_bits_per_value": 2.0
     },
-    "compress:error_bound": 10,
-    "compress:error_bound_unit": "DN",
-    "compress:nodata_preserved": true,
-    "compress:input_bytes": 1000000000,
-    "compress:compressed_bytes": 125000000,
-    "compress:compression_ratio": 8,
+    "compress:error_bound": 2,
+    "compress:error_bound_unit": "embedding code",
+    "compress:input_bytes": 16777216,
+    "compress:compressed_bytes": 4194304,
+    "compress:compression_ratio": 4,
     "compress:bits_per_value": 2,
-    "compress:encode_time_seconds": 18.4,
-    "compress:decode_time_seconds": 2.1,
-    "compress:encode_throughput_mb_s": 54.35,
-    "compress:decode_throughput_mb_s": 476.19,
+    "compress:encode_time_seconds": 0.31,
+    "compress:decode_time_seconds": 0.08,
+    "compress:encode_throughput_mb_s": 54.12,
+    "compress:decode_throughput_mb_s": 209.72,
     "compress:downstream_metrics": {
-      "change_iou": 0.97,
-      "stream_f1": 0.99
+      "change_iou": 0.97
     }
   },
   "links": [
@@ -70,12 +65,13 @@
     }
   ],
   "assets": {
-    "compressed": {
-      "href": "https://example.com/sentinel-2/sample-compressed.tif",
+    "embedding": {
+      "href": "https://example.com/alphaearth/2024/sample-embedding.tif",
       "type": "image/tiff; application=geotiff",
-      "title": "Lossy compressed Sentinel-2 image",
+      "title": "Lossy compressed 64-dimensional AlphaEarth embedding array",
+      "description": "64 x 512 x 512 int8 AlphaEarth embedding array.",
       "roles": ["data"]
     }
   },
-  "collection": "sentinel-2-compress-example"
+  "collection": "alphaearth-compress-example"
 }
