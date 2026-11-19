@@ -14,7 +14,10 @@ Earth Compress emphasizes that compression choices depend on both the source dat
 
 - [Catalog Example](examples/catalog.json)
 - [Collection Example](examples/collection.json)
-- [Item Example](examples/item.json)
+- [Sentinel-2 lossless Item](examples/sentinel-lossless.json)
+- [Sentinel-2 near-lossless Item](examples/sentinel-near-lossless.json)
+- [Sentinel-2 lossy Item](examples/sentinel-lossy.json)
+- [Layered AlphaEarth embedding Item](examples/alphaearth-embedding.json)
 - [JSON Schema](json-schema/schema.json)
 
 ## Item Properties
@@ -29,6 +32,8 @@ The `compress:*` fields describe the compressed representation of an Item's data
 | `compress:configuration` | string | - | Name or identifier of the complete codec configuration. |
 | `compress:objective` | string | - | Trade-off being prioritized, such as `compression_ratio`, `read_speed`, or `downstream_accuracy`. |
 | `compress:parameters` | object | - | Codec-specific options used to produce this representation. |
+| `compress:mask_asset` | string | - | Item asset key for the validity or NoData mask used with the representation. |
+| `compress:error_asset` | string | - | Item asset key for per-value reconstruction error diagnostics; not a decoder correction stream. |
 | `compress:components` | array | - | Encoded components, the STAC asset holding each component, its transform bands, fidelity mode, and reconstruction order. |
 | `compress:reconstruction` | object | - | Transform, array axes, output representation, and inverse operation needed to recombine components. |
 | `compress:error_bound` | number | native units | Maximum absolute error in `near-lossless` mode or maximum RMSE in `lossy` mode. |
@@ -66,6 +71,12 @@ Each component records:
 The Item example demonstrates a three-level 2D CDF 5/3 decomposition of an illustrative 64 x 512 x 512 embedding. It stores the level-3 `LL` base and groups the `LH`, `HL`, and `HH` bands into one detail asset for each level. To reconstruct fully, decode the lossless base, inverse-transform it with the level-3 details to obtain the level-2 approximation, then add level-2 details, followed by level-1 details. If details are omitted, `zero_fill` means their coefficients are set to zero before the inverse transform; this produces a lower-detail approximation, not the original values. Finally apply the stated output conversion. The example's URLs and performance, size, and quality numbers are illustrative, not measurements of an existing codec.
 
 For interoperability, component assets should contain a documented, self-describing stream or have their coefficient type, shape, byte order, and framing specified by the codec. The `asset` references connect the layer description to downloadable data; the inverse operation describes how those assets are recombined.
+
+## Mask and Error Assets
+
+The Item examples include a validity-mask asset and an absolute-error diagnostic asset. `compress:mask_asset` and `compress:error_asset` point to their keys in the Item's `assets` object. The mask uses 1 for valid values and 0 for NoData; decoders should preserve masked positions and exclude them from error calculations. The error asset contains per-value absolute differences between the source and decoded representation in source units. It is a QA product, not correction data required to decode. For the lossless example its values are all zero; for lossy examples it shows where and by how much values changed. Its presence does not replace the declared error bound or downstream validation metrics.
+
+The lossless, near-lossless, and lossy Sentinel-2 examples use the same sample footprint and distinguish their fidelity promises: lossless reproduces values exactly; near-lossless bounds each valid value's absolute error; lossy bounds the valid values' RMSE. Their codec settings and measurements are illustrative, not benchmark results.
 
 ## Using the Extension
 

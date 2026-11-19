@@ -20,6 +20,8 @@
   "bbox": [-122.6, 37.0, -121.2, 38.1],
   "properties": {
     "datetime": "2024-06-15T00:00:00Z",
+    "compress:mask_asset": "validity_mask",
+    "compress:error_asset": "absolute_error",
     "compress:mode": "lossy",
     "compress:codec": "layered-wavelet+zstd",
     "compress:codec_version": "illustrative-1",
@@ -122,7 +124,7 @@
     },
     {
       "rel": "self",
-      "href": "./item.json",
+      "href": "./alphaearth-embedding.json",
       "type": "application/geo+json"
     }
   ],
@@ -150,7 +152,19 @@
       "type": "application/octet-stream",
       "title": "Lossy level-1 wavelet detail component",
       "roles": ["data"]
+    },
+    "validity_mask": {
+      "href": "https://example.com/alphaearth/2024/validity-mask.tif",
+      "type": "image/tiff; application=geotiff",
+      "title": "Embedding validity mask (1=valid, 0=NoData)",
+      "roles": ["metadata"]
+    },
+    "absolute_error": {
+      "href": "https://example.com/alphaearth/2024/absolute-error.tif",
+      "type": "image/tiff; application=geotiff",
+      "title": "Per-value absolute reconstruction error",
+      "roles": ["quality"]
     }
   },
-  "collection": "alphaearth-compress-example"
+  "collection": "compress-examples"
 }

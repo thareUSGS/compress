@@ -1,8 +1,8 @@
 {
-  "id": "alphaearth-compress-example",
+  "id": "compress-examples",
   "type": "Collection",
   "stac_version": "1.1.0",
-  "description": "A sample collection of AlphaEarth embeddings demonstrating compression metadata on its Items.",
+  "description": "Example Sentinel-2 images and an AlphaEarth embedding demonstrating lossless, near-lossless, lossy, and layered compression metadata.",
   "links": [
     {
       "rel": "root",
@@ -21,12 +21,30 @@
     },
     {
       "rel": "item",
-      "href": "./item.json",
+      "href": "./sentinel-lossless.json",
       "type": "application/geo+json",
-      "title": "Compressed AlphaEarth embedding"
+      "title": "Sentinel-2 lossless compression"
+    },
+    {
+      "rel": "item",
+      "href": "./sentinel-near-lossless.json",
+      "type": "application/geo+json",
+      "title": "Sentinel-2 near-lossless compression"
+    },
+    {
+      "rel": "item",
+      "href": "./sentinel-lossy.json",
+      "type": "application/geo+json",
+      "title": "Sentinel-2 lossy compression"
+    },
+    {
+      "rel": "item",
+      "href": "./alphaearth-embedding.json",
+      "type": "application/geo+json",
+      "title": "Layered AlphaEarth embedding compression"
     }
   ],
-  "title": "AlphaEarth Embedding Compression Example",
+  "title": "Compression Mode Examples",
   "extent": {
     "spatial": {
       "bbox": [
@@ -41,8 +59,8 @@
     "temporal": {
       "interval": [
         [
-          "2024-06-15T18:42:00Z",
-          "2024-06-15T18:43:00Z"
+          "2024-06-15T00:00:00Z",
+          "2024-06-15T23:59:59Z"
         ]
       ]
     }

@@ -110,6 +110,14 @@
           "type": "object",
           "description": "Codec-specific options used to produce the compressed representation."
         },
+        "compress:mask_asset": {
+          "type": "string",
+          "description": "Key of a STAC Item asset containing the validity or NoData mask used with the compressed representation."
+        },
+        "compress:error_asset": {
+          "type": "string",
+          "description": "Key of a STAC Item asset containing per-value reconstruction error diagnostics; it is not a correction stream."
+        },
         "compress:components": {
           "type": "array",
           "minItems": 1,

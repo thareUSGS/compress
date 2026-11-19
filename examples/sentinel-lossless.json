@@ -1,0 +1,86 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/compress/v1.0.0/schema.json"
+  ],
+  "id": "sentinel-2-lossless-example",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [-122.6, 37.0],
+        [-121.2, 37.0],
+        [-121.2, 38.1],
+        [-122.6, 38.1],
+        [-122.6, 37.0]
+      ]
+    ]
+  },
+  "bbox": [-122.6, 37.0, -121.2, 38.1],
+  "properties": {
+    "datetime": "2024-06-15T18:42:31Z",
+    "platform": "sentinel-2a",
+    "instruments": ["msi"],
+    "constellation": "sentinel-2",
+    "compress:mode": "lossless",
+    "compress:codec": "zstd",
+    "compress:codec_version": "example-1",
+    "compress:configuration": "zstd-level-3",
+    "compress:objective": "compression_ratio",
+    "compress:parameters": {
+      "level": 3
+    },
+    "compress:mask_asset": "validity_mask",
+    "compress:error_asset": "absolute_error",
+    "compress:nodata_preserved": true,
+    "compress:zero_preserved": true,
+    "compress:input_bytes": 6815744,
+    "compress:compressed_bytes": 3407872,
+    "compress:compression_ratio": 2,
+    "compress:bits_per_value": 8
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "./catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "./collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "collection",
+      "href": "./collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "./sentinel-lossless.json",
+      "type": "application/geo+json"
+    }
+  ],
+  "assets": {
+    "image": {
+      "href": "https://example.com/sentinel-2/lossless/image.tif",
+      "type": "image/tiff; application=geotiff",
+      "title": "Losslessly compressed Sentinel-2 image",
+      "roles": ["data"]
+    },
+    "validity_mask": {
+      "href": "https://example.com/sentinel-2/lossless/validity-mask.tif",
+      "type": "image/tiff; application=geotiff",
+      "title": "Validity mask (1=valid, 0=NoData)",
+      "roles": ["metadata"]
+    },
+    "absolute_error": {
+      "href": "https://example.com/sentinel-2/lossless/absolute-error.tif",
+      "type": "image/tiff; application=geotiff",
+      "title": "Absolute reconstruction error (all zero for lossless data)",
+      "roles": ["quality"]
+    }
+  },
+  "collection": "compress-examples"
+}
