@@ -2,78 +2,49 @@
   "type": "Feature",
   "stac_version": "1.1.0",
   "stac_extensions": [
-    "https://stac-extensions.github.io/cloud/v1.0.0/schema.json",
-    "https://stac-extensions.github.io/eo/v2.0.0/schema.json"
+    "https://stac-extensions.github.io/compress/v1.0.0/schema.json"
   ],
-  "id": "LC09_L2SP_044034_20240615_20240617_02_T1",
+  "id": "S2A_MSIL1C_20240615T184921_compressed",
   "geometry": {
     "type": "Polygon",
     "coordinates": [
       [
-        [
-          -122.6,
-          37.0
-        ],
-        [
-          -121.2,
-          37.0
-        ],
-        [
-          -121.2,
-          38.1
-        ],
-        [
-          -122.6,
-          38.1
-        ],
-        [
-          -122.6,
-          37.0
-        ]
+        [-122.6, 37.0],
+        [-121.2, 37.0],
+        [-121.2, 38.1],
+        [-122.6, 38.1],
+        [-122.6, 37.0]
       ]
     ]
   },
-  "bbox": [
-    -122.6,
-    37.0,
-    -121.2,
-    38.1
-  ],
+  "bbox": [-122.6, 37.0, -121.2, 38.1],
   "properties": {
     "datetime": "2024-06-15T18:42:31Z",
-    "platform": "landsat-9",
-    "instruments": [
-      "oli-2",
-      "tirs-2"
-    ],
-    "constellation": "landsat",
-    "eo:cloud_cover": 19.5,
-    "cloud:clear": 72.1,
-    "cloud:clear_area": 721.0,
-    "cloud:cloud_area": 184.0,
-    "cloud:shadow": 4.2,
-    "cloud:shadow_area": 42.0,
-    "cloud:cirrus": 1.1,
-    "cloud:cirrus_area": 11.0,
-    "cloud:snow_ice": 2.2,
-    "cloud:snow_ice_area": 22.0,
-    "cloud:haze": 1.5,
-    "cloud:haze_area": 15.0,
-    "cloud:smoke": 0.5,
-    "cloud:smoke_area": 5.0,
-    "cloud:reference_area": 1000.0,
-    "cloud:algorithm": "Example multi-class obscuration classifier",
-    "cloud:algorithm_version": "1.0",
-    "cloud:mask_type": "custom",
-    "cloud:confidence": "high",
-    "cloud:classes": {
-      "0": "clear",
-      "1": "cloud",
-      "2": "cloud_shadow",
-      "3": "cirrus",
-      "4": "snow_ice",
-      "5": "haze",
-      "6": "smoke"
+    "platform": "sentinel-2a",
+    "instruments": ["msi"],
+    "constellation": "sentinel-2",
+    "compress:mode": "lossy",
+    "compress:codec": "georvq",
+    "compress:codec_version": "1",
+    "compress:configuration": "georvq-s2-v1",
+    "compress:objective": "downstream_accuracy",
+    "compress:parameters": {
+      "bit_rate": 2.0
+    },
+    "compress:error_bound": 10,
+    "compress:error_bound_unit": "DN",
+    "compress:nodata_preserved": true,
+    "compress:input_bytes": 1000000000,
+    "compress:compressed_bytes": 125000000,
+    "compress:compression_ratio": 8,
+    "compress:bits_per_value": 2,
+    "compress:encode_time_seconds": 18.4,
+    "compress:decode_time_seconds": 2.1,
+    "compress:encode_throughput_mb_s": 54.35,
+    "compress:decode_throughput_mb_s": 476.19,
+    "compress:downstream_metrics": {
+      "change_iou": 0.97,
+      "stream_f1": 0.99
     }
   },
   "links": [
@@ -99,22 +70,12 @@
     }
   ],
   "assets": {
-    "visual": {
-      "href": "https://example.com/landsat/sample-visual.tif",
-      "type": "image/tiff; application=geotiff; profile=cloud-optimized",
-      "title": "Visual image",
-      "roles": [
-        "visual"
-      ]
-    },
-    "classification_mask": {
-      "href": "https://example.com/landsat/sample-classification-mask.tif",
-      "type": "image/tiff; application=geotiff; profile=cloud-optimized",
-      "title": "Cloud and obscuration classification mask",
-      "roles": [
-        "data"
-      ]
+    "compressed": {
+      "href": "https://example.com/sentinel-2/sample-compressed.tif",
+      "type": "image/tiff; application=geotiff",
+      "title": "Lossy compressed Sentinel-2 image",
+      "roles": ["data"]
     }
   },
-  "collection": "landsat-example"
+  "collection": "sentinel-2-compress-example"
 }

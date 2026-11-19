@@ -1,8 +1,8 @@
 {
-  "id": "earth-observation-cloud-examples",
+  "id": "earth-observation-compress-examples",
   "type": "Catalog",
   "stac_version": "1.1.0",
-  "description": "Example catalog of remotely sensed Earth observation data with cloud and atmospheric obscuration metadata.",
+  "description": "Example catalog of Earth observation data with compression metadata.",
   "links": [
     {
       "rel": "root",
@@ -18,8 +18,8 @@
       "rel": "child",
       "href": "./collection.json",
       "type": "application/json",
-      "title": "Example Landsat Collection"
+      "title": "Example Sentinel-2 Collection"
     }
   ],
-  "title": "Earth Observation Cloud Examples"
+  "title": "Earth Observation Compression Examples"
 }

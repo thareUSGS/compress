@@ -1,145 +1,101 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://stac-extensions.github.io/cloud/v1.0.0/schema.json",
-  "title": "Cloud Extension",
-  "description": "Cloud and atmospheric obscuration metadata for Earth observation imagery.",
+  "$id": "https://stac-extensions.github.io/compress/v1.0.0/schema.json",
+  "title": "Compress Extension",
+  "description": "Compression metadata for Earth observation and environmental data.",
   "type": "object",
-
   "definitions": {
     "fields": {
       "type": "object",
       "properties": {
-
-        "cloud:clear": {
-          "type": "number",
-          "minimum": 0,
-          "maximum": 100,
-          "description": "Percentage of valid pixels classified as clear surface."
-        },
-
-        "cloud:clear_area": {
-          "type": "number",
-          "minimum": 0,
-          "description": "Area of clear visible surface in square kilometers."
-        },
-
-        "cloud:cloud_area": {
-          "type": "number",
-          "minimum": 0,
-          "description": "Area classified as cloud in square kilometers."
-        },
-
-        "cloud:shadow": {
-          "type": "number",
-          "minimum": 0,
-          "maximum": 100,
-          "description": "Percentage classified as cloud shadow."
-        },
-
-        "cloud:shadow_area": {
-          "type": "number",
-          "minimum": 0,
-          "description": "Area classified as cloud shadow in square kilometers."
-        },
-
-        "cloud:cirrus": {
-          "type": "number",
-          "minimum": 0,
-          "maximum": 100,
-          "description": "Percentage classified as cirrus cloud."
-        },
-
-        "cloud:cirrus_area": {
-          "type": "number",
-          "minimum": 0,
-          "description": "Area classified as cirrus cloud in square kilometers."
-        },
-
-        "cloud:snow_ice": {
-          "type": "number",
-          "minimum": 0,
-          "maximum": 100,
-          "description": "Percentage classified as snow or ice."
-        },
-
-        "cloud:snow_ice_area": {
-          "type": "number",
-          "minimum": 0,
-          "description": "Area classified as snow or ice in square kilometers."
-        },
-
-        "cloud:haze": {
-          "type": "number",
-          "minimum": 0,
-          "maximum": 100,
-          "description": "Percentage classified as haze or aerosol obscuration."
-        },
-
-        "cloud:haze_area": {
-          "type": "number",
-          "minimum": 0,
-          "description": "Area classified as haze or aerosol obscuration in square kilometers."
-        },
-
-        "cloud:smoke": {
-          "type": "number",
-          "minimum": 0,
-          "maximum": 100,
-          "description": "Percentage classified as smoke contamination."
-        },
-
-        "cloud:smoke_area": {
-          "type": "number",
-          "minimum": 0,
-          "description": "Area classified as smoke contamination in square kilometers."
-        },
-
-        "cloud:reference_area": {
-          "type": "number",
-          "minimum": 0,
-          "description": "Total valid area used for percentage calculations in square kilometers."
-        },
-
-        "cloud:algorithm": {
+        "compress:mode": {
           "type": "string",
-          "description": "Cloud or atmospheric obscuration classification algorithm."
+          "enum": ["lossless", "near-lossless", "lossy"],
+          "description": "Fidelity mode of the compressed representation."
         },
-
-        "cloud:algorithm_version": {
+        "compress:codec": {
           "type": "string",
-          "description": "Version of the classification algorithm."
+          "description": "Compression codec or algorithm."
         },
-
-        "cloud:mask_type": {
+        "compress:codec_version": {
           "type": "string",
-          "enum": [
-            "qa_band",
-            "pixel_qa",
-            "qa_pixel",
-            "fmask",
-            "cfmask",
-            "scl",
-            "probability",
-            "custom"
-          ],
-          "description": "Type of cloud mask product."
+          "description": "Version of the codec or algorithm."
         },
-
-        "cloud:confidence": {
+        "compress:configuration": {
           "type": "string",
-          "enum": [
-            "low",
-            "medium",
-            "high"
-          ],
-          "description": "Overall confidence assessment."
+          "description": "Name or identifier of the complete codec configuration."
         },
-
-        "cloud:classes": {
+        "compress:objective": {
+          "type": "string",
+          "enum": ["compression_ratio", "read_speed", "downstream_accuracy"],
+          "description": "Trade-off prioritized by the compression configuration."
+        },
+        "compress:parameters": {
           "type": "object",
-          "description": "Mapping of source classification values to class names.",
+          "description": "Codec-specific options used to produce the compressed representation."
+        },
+        "compress:error_bound": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Maximum absolute error in near-lossless mode or maximum RMSE in lossy mode."
+        },
+        "compress:error_bound_unit": {
+          "type": "string",
+          "description": "Native unit of the error bound."
+        },
+        "compress:nodata_preserved": {
+          "type": "boolean",
+          "description": "Whether NoData positions are preserved and no new NoData values are introduced."
+        },
+        "compress:zero_preserved": {
+          "type": "boolean",
+          "description": "Whether exact zeros in native units are preserved."
+        },
+        "compress:input_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Size of the uncompressed input representation in bytes."
+        },
+        "compress:compressed_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Size of the compressed representation in bytes."
+        },
+        "compress:compression_ratio": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Input size divided by compressed size."
+        },
+        "compress:bits_per_value": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Compressed size in bits per input value."
+        },
+        "compress:encode_time_seconds": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Time to encode the representation in seconds."
+        },
+        "compress:decode_time_seconds": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Time to decode the representation in seconds."
+        },
+        "compress:encode_throughput_mb_s": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Encoding throughput in decimal megabytes per second."
+        },
+        "compress:decode_throughput_mb_s": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Decoding throughput in decimal megabytes per second."
+        },
+        "compress:downstream_metrics": {
+          "type": "object",
+          "description": "Named downstream task metrics measured on the compressed representation.",
           "additionalProperties": {
-            "type": "string"
+            "type": "number"
           }
         }
       }
