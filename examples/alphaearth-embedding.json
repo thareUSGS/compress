@@ -2,6 +2,8 @@
   "type": "Feature",
   "stac_version": "1.1.0",
   "stac_extensions": [
+    "https://stac-extensions.github.io/embeddings/v1.0.0/schema.json",
+    "https://stac-extensions.github.io/processing/v1.2.0/schema.json",
     "https://stac-extensions.github.io/compress/v1.0.0/schema.json"
   ],
   "id": "alphaearth-foundations-2024_compressed",
@@ -20,6 +22,11 @@
   "bbox": [-122.6, 37.0, -121.2, 38.1],
   "properties": {
     "datetime": "2024-06-15T00:00:00Z",
+    "processing:datetime": "2025-01-10T11:22:33Z",
+    "processing:version": "earth-compress-layered-example-1",
+    "data_type": "int8",
+    "emb:quantization_method": "linear",
+    "emb:original_data_type": "float32",
     "compress:mask_asset": "validity_mask",
     "compress:error_asset": "absolute_error",
     "compress:mode": "lossy",
@@ -129,6 +136,15 @@
     }
   ],
   "assets": {
+    "embeddings": {
+      "href": "https://example.com/alphaearth/2024/embeddings.parquet",
+      "type": "application/vnd.apache.parquet",
+      "title": "Reconstructed AlphaEarth embedding chip",
+      "description": "Decoded 64-dimensional chip representation; the compressed representation is carried by the component assets.",
+      "roles": ["data", "embeddings"],
+      "emb:type": "chip",
+      "emb:dimensions": [64]
+    },
     "embedding_base_ll3": {
       "href": "https://example.com/alphaearth/2024/embedding-base-ll3.bin",
       "type": "application/octet-stream",

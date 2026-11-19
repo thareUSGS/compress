@@ -82,6 +82,8 @@ The lossless, near-lossless, and lossy Sentinel-2 examples use the same sample f
 
 Include the Compress Extension schema URI in an Item's `stac_extensions` array when using `compress:*` fields. The example Item shows a layered compressed AlphaEarth embedding. Its URLs and measurements are illustrative.
 
+The AlphaEarth example also uses the [STAC Embeddings Extension](https://github.com/stac-extensions/embeddings) to describe the reconstructed chip asset (`emb:type`, `emb:dimensions`, and its Parquet media type), and the [Processing Extension](https://github.com/stac-extensions/processing) to identify when and with which processing version it was generated. The Parquet asset is the decoded embedding representation; the `compress:components` assets are the encoded layers used to reconstruct it.
+
 ## Contributing
 
 Contributions are subject to the [STAC Specification Code of Conduct](https://github.com/radiantearth/stac-spec/blob/master/CODE_OF_CONDUCT.md). Please follow the [STAC Specification contributing guide](https://github.com/radiantearth/stac-spec/blob/master/CONTRIBUTING.md). Ensure example JSON is valid and that Compress Extension fields conform to [the schema](json-schema/schema.json).
