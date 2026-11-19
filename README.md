@@ -29,6 +29,8 @@ The `compress:*` fields describe the compressed representation of an Item's data
 | `compress:configuration` | string | - | Name or identifier of the complete codec configuration. |
 | `compress:objective` | string | - | Trade-off being prioritized, such as `compression_ratio`, `read_speed`, or `downstream_accuracy`. |
 | `compress:parameters` | object | - | Codec-specific options used to produce this representation. |
+| `compress:components` | array | - | Encoded components, the STAC asset holding each component, its transform bands, fidelity mode, and reconstruction order. |
+| `compress:reconstruction` | object | - | Transform, array axes, output representation, and inverse operation needed to recombine components. |
 | `compress:error_bound` | number | native units | Maximum absolute error in `near-lossless` mode or maximum RMSE in `lossy` mode. |
 | `compress:error_bound_unit` | string | - | Unit for `compress:error_bound`, matching the source data's native unit. |
 | `compress:nodata_preserved` | boolean | - | Whether NoData values remain in their original positions and no new NoData values are introduced. |
@@ -45,9 +47,29 @@ The `compress:*` fields describe the compressed representation of an Item's data
 
 Compression ratio, bits per value, and throughput should be calculated consistently with the stated input representation. The same `error_bound` has different meanings in `near-lossless` and `lossy` modes; it is not a universal quality score. A codec's parameter names and meanings belong in `compress:parameters` and should be documented by its producer. Downstream metrics should include enough context in the configuration or linked documentation to identify the task and comparison method.
 
+## Layered Components and Reconstruction
+
+A layered codec can separate a transformed array into a base approximation and detail components. A decoder can fetch only the base for a smaller, smoother preview, or fetch the base and detail components for a higher-fidelity reconstruction. `compress:components` identifies each encoded part and the Item asset that stores it. The order and fidelity settings are component-specific; they should not be inferred from asset names.
+
+Each component records:
+
+- `id`: stable identifier within the Item.
+- `role`: `base` for the low-frequency approximation or `detail` for detail coefficients.
+- `asset`: key in the Item's `assets` object containing the encoded component.
+- `reconstruction_order`: order in which the component is supplied to the inverse transform, starting at zero.
+- `level` and `subbands`: transform level and subbands represented. In a 2D wavelet transform, `LL` is the approximation; `LH`, `HL`, and `HH` are detail orientations.
+- `mode` and `compressed_bytes`: component fidelity mode and encoded byte size.
+- Optional `target_bits_per_value`, `quantization_step`, and `error_bound` fields: per-component rate or distortion controls. State error units explicitly. A bound on transform coefficients is not the same as a bound on reconstructed source values.
+
+`compress:reconstruction` defines the operation, transform, wavelet, axes, levels, boundary extension, output shape and dtype, and what to do if a component is omitted. These details matter for reproducibility: two decoders must use the same transform conventions and coefficient ordering to produce the same result.
+
+The Item example demonstrates a three-level 2D CDF 5/3 decomposition of an illustrative 64 x 512 x 512 embedding. It stores the level-3 `LL` base and groups the `LH`, `HL`, and `HH` bands into one detail asset for each level. To reconstruct fully, decode the lossless base, inverse-transform it with the level-3 details to obtain the level-2 approximation, then add level-2 details, followed by level-1 details. If details are omitted, `zero_fill` means their coefficients are set to zero before the inverse transform; this produces a lower-detail approximation, not the original values. Finally apply the stated output conversion. The example's URLs and performance, size, and quality numbers are illustrative, not measurements of an existing codec.
+
+For interoperability, component assets should contain a documented, self-describing stream or have their coefficient type, shape, byte order, and framing specified by the codec. The `asset` references connect the layer description to downloadable data; the inverse operation describes how those assets are recombined.
+
 ## Using the Extension
 
-Include the Compress Extension schema URI in an Item's `stac_extensions` array when using `compress:*` fields. The example Item shows a compressed AlphaEarth embedding asset. Its URL is illustrative, and its values are not benchmark results.
+Include the Compress Extension schema URI in an Item's `stac_extensions` array when using `compress:*` fields. The example Item shows a layered compressed AlphaEarth embedding. Its URLs and measurements are illustrative.
 
 ## Contributing
 

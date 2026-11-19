@@ -5,6 +5,82 @@
   "description": "Compression metadata for Earth observation and environmental data.",
   "type": "object",
   "definitions": {
+    "component": {
+      "type": "object",
+      "required": [
+        "id",
+        "role",
+        "asset",
+        "reconstruction_order",
+        "level",
+        "subbands",
+        "mode",
+        "compressed_bytes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for this encoded component."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["base", "detail"],
+          "description": "Whether the component carries the base approximation or transform details."
+        },
+        "asset": {
+          "type": "string",
+          "description": "Key of the STAC Item asset containing this component."
+        },
+        "reconstruction_order": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Order in which this component is consumed by the reconstruction procedure."
+        },
+        "level": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Transform decomposition level for this component."
+        },
+        "subbands": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": ["LL", "LH", "HL", "HH"]
+          },
+          "description": "Transform subbands carried by this component."
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["lossless", "near-lossless", "lossy"],
+          "description": "Fidelity mode used to encode this component."
+        },
+        "compressed_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Encoded size of this component in bytes."
+        },
+        "target_bits_per_value": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Target encoded rate for this component in bits per coefficient."
+        },
+        "quantization_step": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Quantization step applied to this component's transform coefficients."
+        },
+        "error_bound": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Error bound for this component, in the units given by error_bound_unit."
+        },
+        "error_bound_unit": {
+          "type": "string",
+          "description": "Unit of this component's error bound, such as a transform-coefficient unit."
+        }
+      }
+    },
     "fields": {
       "type": "object",
       "properties": {
@@ -33,6 +109,84 @@
         "compress:parameters": {
           "type": "object",
           "description": "Codec-specific options used to produce the compressed representation."
+        },
+        "compress:components": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/component"
+          },
+          "description": "Encoded components, their STAC assets, and the order and settings needed to combine them."
+        },
+        "compress:reconstruction": {
+          "type": "object",
+          "required": [
+            "operation",
+            "transform",
+            "wavelet",
+            "axes",
+            "levels",
+            "boundary_extension",
+            "output_shape",
+            "output_dtype",
+            "omitted_component_policy"
+          ],
+          "properties": {
+            "operation": {
+              "type": "string",
+              "const": "inverse_transform",
+              "description": "Operation used to reconstruct the decoded values from transform components."
+            },
+            "transform": {
+              "type": "string",
+              "description": "Transform used to create the components."
+            },
+            "wavelet": {
+              "type": "string",
+              "description": "Wavelet family and variant, if the transform is a wavelet transform."
+            },
+            "axes": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "description": "Zero-based array axes transformed, in transform order."
+            },
+            "levels": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Number of decomposition levels."
+            },
+            "boundary_extension": {
+              "type": "string",
+              "description": "Boundary rule used by the forward and inverse transforms."
+            },
+            "output_shape": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "description": "Shape of the reconstructed array."
+            },
+            "output_dtype": {
+              "type": "string",
+              "description": "Data type of the reconstructed array."
+            },
+            "output_conversion": {
+              "type": "string",
+              "description": "Rounding, clipping, or casting applied after inverse transformation."
+            },
+            "omitted_component_policy": {
+              "type": "string",
+              "enum": ["zero_fill", "not_supported"],
+              "description": "How reconstruction handles a component that is not fetched or decoded."
+            }
+          },
+          "description": "Transform and reconstruction instructions for combining the components."
         },
         "compress:error_bound": {
           "type": "number",

@@ -21,12 +21,14 @@
   "properties": {
     "datetime": "2024-06-15T00:00:00Z",
     "compress:mode": "lossy",
-    "compress:codec": "georvq",
-    "compress:codec_version": "2",
-    "compress:configuration": "georvq-ae-v2",
+    "compress:codec": "layered-wavelet+zstd",
+    "compress:codec_version": "illustrative-1",
+    "compress:configuration": "cdf53-zstd-layered-example",
     "compress:objective": "downstream_accuracy",
     "compress:parameters": {
-      "target_bits_per_value": 2.0
+      "coefficient_coder": "Zstandard",
+      "coefficient_dtype": "int16",
+      "detail_quantization": "uniform"
     },
     "compress:error_bound": 2,
     "compress:error_bound_unit": "embedding code",
@@ -40,6 +42,66 @@
     "compress:decode_throughput_mb_s": 209.72,
     "compress:downstream_metrics": {
       "change_iou": 0.97
+    },
+    "compress:components": [
+      {
+        "id": "base-ll-level-3",
+        "role": "base",
+        "asset": "embedding_base_ll3",
+        "reconstruction_order": 0,
+        "level": 3,
+        "subbands": ["LL"],
+        "mode": "lossless",
+        "compressed_bytes": 1048576
+      },
+      {
+        "id": "detail-level-3",
+        "role": "detail",
+        "asset": "embedding_detail_l3",
+        "reconstruction_order": 1,
+        "level": 3,
+        "subbands": ["LH", "HL", "HH"],
+        "mode": "lossy",
+        "compressed_bytes": 524288,
+        "target_bits_per_value": 2,
+        "quantization_step": 2
+      },
+      {
+        "id": "detail-level-2",
+        "role": "detail",
+        "asset": "embedding_detail_l2",
+        "reconstruction_order": 2,
+        "level": 2,
+        "subbands": ["LH", "HL", "HH"],
+        "mode": "lossy",
+        "compressed_bytes": 1048576,
+        "target_bits_per_value": 2,
+        "quantization_step": 4
+      },
+      {
+        "id": "detail-level-1",
+        "role": "detail",
+        "asset": "embedding_detail_l1",
+        "reconstruction_order": 3,
+        "level": 1,
+        "subbands": ["LH", "HL", "HH"],
+        "mode": "lossy",
+        "compressed_bytes": 1572864,
+        "target_bits_per_value": 2,
+        "quantization_step": 8
+      }
+    ],
+    "compress:reconstruction": {
+      "operation": "inverse_transform",
+      "transform": "2d discrete wavelet transform",
+      "wavelet": "CDF 5/3 integer-to-integer",
+      "axes": [1, 2],
+      "levels": 3,
+      "boundary_extension": "symmetric",
+      "output_shape": [64, 512, 512],
+      "output_dtype": "int8",
+      "output_conversion": "saturating_round_to_nearest",
+      "omitted_component_policy": "zero_fill"
     }
   },
   "links": [
@@ -65,11 +127,28 @@
     }
   ],
   "assets": {
-    "embedding": {
-      "href": "https://example.com/alphaearth/2024/sample-embedding.tif",
-      "type": "image/tiff; application=geotiff",
-      "title": "Lossy compressed 64-dimensional AlphaEarth embedding array",
-      "description": "64 x 512 x 512 int8 AlphaEarth embedding array.",
+    "embedding_base_ll3": {
+      "href": "https://example.com/alphaearth/2024/embedding-base-ll3.bin",
+      "type": "application/octet-stream",
+      "title": "Lossless level-3 LL base component",
+      "roles": ["data"]
+    },
+    "embedding_detail_l3": {
+      "href": "https://example.com/alphaearth/2024/embedding-detail-l3.bin",
+      "type": "application/octet-stream",
+      "title": "Lossy level-3 wavelet detail component",
+      "roles": ["data"]
+    },
+    "embedding_detail_l2": {
+      "href": "https://example.com/alphaearth/2024/embedding-detail-l2.bin",
+      "type": "application/octet-stream",
+      "title": "Lossy level-2 wavelet detail component",
+      "roles": ["data"]
+    },
+    "embedding_detail_l1": {
+      "href": "https://example.com/alphaearth/2024/embedding-detail-l1.bin",
+      "type": "application/octet-stream",
+      "title": "Lossy level-1 wavelet detail component",
       "roles": ["data"]
     }
   },
